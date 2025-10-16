@@ -21,6 +21,7 @@ streamlit==1.36.0
 # --- Development and environment tools ---
 jupyter==1.0.0
 notebook==7.2.1
+python-dotenv==1.0.1
 
 # --- Optional: DeFi-specific data handling (future expansion) ---
 web3==6.19.0
