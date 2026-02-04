@@ -13,7 +13,7 @@ This repository contains modularized components for analyzing and visualizing li
 - **src/** — Core Python modules  
   - `api.py`: Etherscan and RPC data fetching utilities  
   - `prices.py`: Binance API price loader  
-  - `features.py`: feature engineering and daily liquidation aggregation  
+  - `features.py`: feature engineering and daily liquidation aggregation ￼ 
   - `stress.py`: kernel-based stress testing functions  
 
 - **notebooks/** — Jupyter Notebooks for analysis and visualization  
