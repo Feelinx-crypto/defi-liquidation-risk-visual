@@ -10,7 +10,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     env:
-      # 从仓库 Secret 中读取密钥，避免暴露在代码中
+      # 从仓库 Secret 中读取密钥.
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
     steps:
       # 拉取仓库代码
