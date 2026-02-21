@@ -14,6 +14,7 @@ DeFi lending protocols allow users to borrow assets against cryptocurrency colla
 
 ## Architecture
 
+```mermaid
 graph TD
     %% 定义节点样式
     subgraph Data_Sourcing [数据源]
@@ -52,6 +53,7 @@ graph TD
     style B fill:#f9f,stroke:#333,stroke-width:2px
     style FIGS fill:#00ff0022,stroke:#00aa00,stroke-width:2px
     style NB fill:#00ff0022,stroke:#00aa00,stroke-width:2px
+```
 
 ## Key Findings (7,832 liquidation events, Jan–Oct 2025)
 
