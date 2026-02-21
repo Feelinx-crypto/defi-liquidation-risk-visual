@@ -16,13 +16,13 @@ DeFi lending protocols allow users to borrow assets against cryptocurrency colla
 
 ```mermaid
 graph TD
-    %% 定义节点样式
-    subgraph Data_Sourcing [数据源]
+    
+    subgraph Data_Sourcing [Data_Sourcing]
         E(Etherscan API)
         B(Binance API)
     end
 
-    subgraph Scripts [核心脚本]
+    subgraph Scripts [Scripts]
         API[src/api.py]
         EXT[src/extract_multi_chain.py]
         PRC[src/prices.py]
@@ -30,12 +30,12 @@ graph TD
         STR[src/stress.py]
     end
 
-    subgraph Outputs [项目产出]
+    subgraph Outputs [Outputs]
         NB[notebooks/ EDA & Analysis]
         FIGS[figs/ Stress Curves]
     end
 
-    %% 连接线
+    
     E --> API
     API --> EXT
     B --> PRC
@@ -48,7 +48,7 @@ graph TD
     
     STR --> FIGS
 
-    %% 样式美化
+    
     style E fill:#f9f,stroke:#333,stroke-width:2px
     style B fill:#f9f,stroke:#333,stroke-width:2px
     style FIGS fill:#00ff0022,stroke:#00aa00,stroke-width:2px
