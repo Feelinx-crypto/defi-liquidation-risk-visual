@@ -8,9 +8,9 @@ provides dictionaries of supported chains and assets. Downstream
 functions can import this module to parameterise API calls and data
 processing logic.
 
-Chain addresses and start blocks come from the cross‑chain Aave V3 data
-infrastructure paper [oai_citation:0‡arxiv.org](https://arxiv.org/html/2512.11363v1#:~:text=Table%202%3A%20Blockchain%20Configurations%20for,70%2C593%2C220%20Base%200xA238Dd80C259a72e81d7e4664a9801593F98d1c5%202%2C357%2C200%2037%2C067%2C658).  The event signature is
-confirmed by Aave’s official documentation [oai_citation:1‡quicknode.com](https://www.quicknode.com/sample-app-library/ethereum-aave-liquidation-tracker#:~:text=The%20Pool,deposits%2C%20borrowing%2C%20repayments%2C%20and%20liquidations).
+Chain addresses and start blocks come from the cross-chain Aave V3 data
+infrastructure paper (arXiv:2512.11363). The event signature is
+confirmed by Aave’s official documentation.
 """
 
 from dataclasses import dataclass
@@ -30,12 +30,12 @@ class AssetConfig:
     pair: Optional[str]      # Binance trading pair (e.g. "ETHUSDT"); None if not applicable
     fallback_price: Optional[float] = None  # Fallback price for stablecoins
 
-# Topic 0 for the Aave V3 LiquidationCall event [oai_citation:2‡quicknode.com](https://www.quicknode.com/sample-app-library/ethereum-aave-liquidation-tracker#:~:text=The%20Pool,deposits%2C%20borrowing%2C%20repayments%2C%20and%20liquidations).
+# Topic 0 for the Aave V3 LiquidationCall event.
 LIQUIDATION_CALL_TOPIC = (
     "0xe413a321e8681d831f4dbccbca790d2952b56f977908e45be37335533e005286"
 )
 
-# Chain configurations (address and start block from Aave V3 cross-chain research [oai_citation:3‡arxiv.org](https://arxiv.org/html/2512.11363v1#:~:text=Table%202%3A%20Blockchain%20Configurations%20for,70%2C593%2C220%20Base%200xA238Dd80C259a72e81d7e4664a9801593F98d1c5%202%2C357%2C200%2037%2C067%2C658)).
+# Chain configurations (address and start block from Aave V3 cross-chain research).
 CHAINS: Dict[str, ChainConfig] = {
     "ethereum": ChainConfig(
         name="ethereum",

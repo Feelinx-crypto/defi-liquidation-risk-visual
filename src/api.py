@@ -8,8 +8,8 @@ come from `src.config`. Functions here remain agnostic to the specific chain
 and asset.
 
 Chain pool addresses and start blocks originate from the Aave cross-chain
-data infrastructure [oai_citation:0‡arxiv.org](https://arxiv.org/html/2512.11363v1#:~:text=Table%202%3A%20Blockchain%20Configurations%20for,70%2C593%2C220%20Base%200xA238Dd80C259a72e81d7e4664a9801593F98d1c5%202%2C357%2C200%2037%2C067%2C658), and the LiquidationCall event signature
-is confirmed in Aave documentation [oai_citation:1‡quicknode.com](https://www.quicknode.com/sample-app-library/ethereum-aave-liquidation-tracker#:~:text=The%20Pool,deposits%2C%20borrowing%2C%20repayments%2C%20and%20liquidations).
+data infrastructure, and the LiquidationCall event signature
+is confirmed in Aave documentation.
 """
 
 from __future__ import annotations
