@@ -24,7 +24,44 @@ Binance API ───► src/prices.py          │
                           ┌────────┴────────┐
                           ▼                 ▼
                     src/stress.py     notebooks/
-                    (Stress Curves)   (EDA + Analysis)
+                    (Stress Curves)   (EDA + Analysisgraph TD
+    %% 定义节点样式
+    subgraph Data_Sourcing [数据源]
+        E(Etherscan API)
+        B(Binance API)
+    end
+
+    subgraph Scripts [核心脚本]
+        API[src/api.py]
+        EXT[src/extract_multi_chain.py]
+        PRC[src/prices.py]
+        FEAT[src/features.py]
+        STR[src/stress.py]
+    end
+
+    subgraph Outputs [项目产出]
+        NB[notebooks/ EDA & Analysis]
+        FIGS[figs/ Stress Curves]
+    end
+
+    %% 连接线
+    E --> API
+    API --> EXT
+    B --> PRC
+    
+    EXT --> FEAT
+    PRC --> FEAT
+    
+    FEAT --> STR
+    FEAT --> NB
+    
+    STR --> FIGS
+
+    %% 样式美化
+    style E fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+    style FIGS fill:#00ff0022,stroke:#00aa00,stroke-width:2px
+    style NB fill:#00ff0022,stroke:#00aa00,stroke-width:2px)
 ```
 
 ## Key Findings (7,832 liquidation events, Jan–Oct 2025)
