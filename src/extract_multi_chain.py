@@ -41,6 +41,9 @@ def main() -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     date_str = datetime.datetime.utcnow().strftime("%Y%m%d")
 
+    success_count = 0
+    fail_count = 0
+
     for chain_name in config.CHAINS.keys():
         for asset_name in config.ASSETS.keys():
             # Extract raw LiquidationCall events
@@ -48,8 +51,10 @@ def main() -> None:
             try:
                 logs_df = extract_liquidations(chain_name, asset_name)
             except Exception as e:
-                print(f"Error extracting events for {chain_name}-{asset_name}: {e}")
+                print(f"ERROR extracting events for {chain_name}-{asset_name}: {e}")
+                fail_count += 1
                 continue
+            success_count += 1
             # Save raw events to CSV
             events_fname = f"aave_v3_{chain_name}_{asset_name}_events_{date_str}.csv"
             events_path = data_dir / events_fname
@@ -60,7 +65,7 @@ def main() -> None:
             try:
                 price_df = binance_daily(asset_name)
             except Exception as e:
-                print(f"Error fetching price for {asset_name}: {e}")
+                print(f"Warning: price fetch failed for {asset_name}: {e}")
                 price_df = None
             if price_df is not None and not price_df.empty:
                 merged = merge_ret_vs_liq(price_df, daily_liq)
@@ -72,6 +77,13 @@ def main() -> None:
                 daily_fname = f"aave_v3_{chain_name}_{asset_name}_liq_counts_{date_str}.csv"
                 daily_path = data_dir / daily_fname
                 daily_liq.to_csv(daily_path, index=False)
+
+    print(f"\nDone: {success_count} succeeded, {fail_count} failed")
+    if success_count == 0:
+        raise SystemExit(
+            f"All {fail_count} extraction(s) failed. "
+            "Check ETHERSCAN_API_KEY and network connectivity."
+        )
 
 
 if __name__ == "__main__":

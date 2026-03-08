@@ -8,8 +8,8 @@ come from `src.config`. Functions here remain agnostic to the specific chain
 and asset.
 
 Chain pool addresses and start blocks originate from the Aave cross-chain
-data infrastructure [oai_citation:0‡arxiv.org](https://arxiv.org/html/2512.11363v1#:~:text=Table%202%3A%20Blockchain%20Configurations%20for,70%2C593%2C220%20Base%200xA238Dd80C259a72e81d7e4664a9801593F98d1c5%202%2C357%2C200%2037%2C067%2C658), and the LiquidationCall event signature
-is confirmed in Aave documentation [oai_citation:1‡quicknode.com](https://www.quicknode.com/sample-app-library/ethereum-aave-liquidation-tracker#:~:text=The%20Pool,deposits%2C%20borrowing%2C%20repayments%2C%20and%20liquidations).
+data infrastructure, and the LiquidationCall event signature
+is confirmed in Aave documentation.
 """
 
 from __future__ import annotations
@@ -160,6 +160,13 @@ def extract_liquidations(
     """
     Extract LiquidationCall events for a specified chain and asset.
 
+    The Aave V3 LiquidationCall event has indexed parameters:
+      topic1 = collateralAsset (address)
+      topic2 = debtAsset (address)
+    Events are filtered post-hoc to include only those where the asset's
+    token address appears in either topic1 or topic2. If no token address
+    is configured for the asset, all events are returned (backward compat).
+
     Args:
         chain_name: Name of the chain defined in `config.CHAINS`.
         asset: Asset symbol (for reference in the output).
@@ -185,7 +192,34 @@ def extract_liquidations(
         return pd.DataFrame(
             columns=["chain", "asset", "blockNumber", "timeStamp", "transactionHash", "timestamp"]
         )
+
+    # Filter by asset token address if available for this chain
+    asset_key = asset.upper()
+    asset_cfg = config.ASSETS.get(asset_key)
+    token_addr = None
+    if asset_cfg and asset_cfg.token_addresses:
+        token_addr = asset_cfg.token_addresses.get(chain_name)
+    if token_addr:
+        # topic1 = collateralAsset, topic2 = debtAsset (zero-padded to 32 bytes)
+        padded = "0x" + token_addr[2:].lower().zfill(64)
+        logs = [
+            lg for lg in logs
+            if lg.get("topics", [None, None, None])[1] == padded
+            or lg.get("topics", [None, None, None])[2] == padded
+        ]
+    elif asset_cfg and asset_cfg.token_addresses:
+        import warnings
+        warnings.warn(
+            f"No token address for {asset_key} on {chain_name}; "
+            f"returning all LiquidationCall events unfiltered.",
+            stacklevel=2,
+        )
+
     df = pd.DataFrame(logs)
+    if df.empty:
+        return pd.DataFrame(
+            columns=["chain", "asset", "blockNumber", "timeStamp", "transactionHash", "timestamp"]
+        )
     # Normalise timestamp field: Etherscan may use "timeStamp" or "timestamp".
     if "timeStamp" not in df.columns and "timestamp" in df.columns:
         df["timeStamp"] = df["timestamp"]
